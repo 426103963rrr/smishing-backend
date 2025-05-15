@@ -1,11 +1,19 @@
-const express = require('express')
-const router = express.Router()
-const authController = require('../controllers/auth.controller')
+import express from "express";
+import asyncHandler from "../utils/asyncHandler.js"
+import { signup, verifyOtp, login } from "../controllers/auth.controller.js";
 
-// POST /signup
-router.post('/signup', authController.signup)
+const router = express.Router();
 
-// POST /login
-router.post('/login', authController.login)
+router.post("/signup", asyncHandler(signup));
+router.post("/verify-otp", asyncHandler(verifyOtp));
+router.post("/login", asyncHandler(login));
 
-module.exports = router
+router.get('/error-test', (req, res, next) => {
+    const err = new Error('This is a forced error!');
+    err.statusCode = 400; // you can set custom status codes if you want
+    next(err);
+  });
+
+
+
+export default router;
