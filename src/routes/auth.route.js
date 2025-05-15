@@ -1,21 +1,19 @@
 import express from "express";
-import { signup, verifyemail, login, forgotpassword, resetpassword } from "../controllers/auth.controller.js";
+import asyncHandler from "../utils/asyncHandler.js"
+import { signup, verifyOtp, login } from "../controllers/auth.controller.js";
 
 const router = express.Router();
 
-// POST /signup
-router.post("/signup", signup);
+router.post("/signup", asyncHandler(signup));
+router.post("/verify-otp", asyncHandler(verifyOtp));
+router.post("/login", asyncHandler(login));
 
-// POST /verify-email
-router.post("/verify-email", verifyemail);
+router.get('/error-test', (req, res, next) => {
+    const err = new Error('This is a forced error!');
+    err.statusCode = 400; // you can set custom status codes if you want
+    next(err);
+  });
 
-// POST /login
-router.post("/login", login);
 
-// POST /forgot-password
-router.post("/forgot-password", forgotpassword);
-
-// POST /reset-password
-router.post("/reset-password", resetpassword);
 
 export default router;
